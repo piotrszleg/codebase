@@ -35,8 +35,8 @@ if (app.get('env') === 'production') {
 }
 app.use(session(sess));
 
-function errorHandler(error, res){
-	parser.run("error.html", {"message":error}, (result)=>res.send(result));
+function errorPage(error, res){
+	parser.run("error.html", {"message":error.message}, (result)=>res.send(result));
 }
 
 function canEditPost(post, request){
@@ -125,24 +125,20 @@ app.get(/code\/([0-9]+)/, function (req, res) {
 
 // User registry routes
 app.post('/register', function (req, res) {
-	accounts.register(req.body.user, req.body.password, (result)=>{
-		if(result) {
+	accounts.register(req.body.user, req.body.password)
+		.then(()=>{
 			req.session.user=req.body.user;
 			res.redirect('/');
-	    } else {
-			parser.run("error.html", {message:"Registration failed"}, (result)=>res.send(result));
-		}
-	});
+		})
+		.catch((err)=>errorPage(err, res));
 });
 app.post('/login', function (req, res) {
-	accounts.login(req.body.user, req.body.password, (result)=>{
-		if(result) {
+	accounts.login(req.body.user, req.body.password)
+		.then(()=>{
 			req.session.user=req.body.user;
 			res.redirect('/');
-	    } else {
-			parser.run("error.html", {message:"Incorrect user data."}, (result)=>res.send(result));
-		}
-	});
+		})
+		.catch((err)=>errorPage(err, res));
 });
 app.get('/logout', function (req, res) {
 	console.log("Log out");
@@ -152,7 +148,7 @@ app.get('/logout', function (req, res) {
 app.get('/userslist', function (req, res) {
 	accounts.list()
 		.then((result)=>parser.run("users.html", {rows:result, user:req.session.user}, (result)=>res.send(result)))
-		.catch((err)=>errorHandler(err, res));
+		.catch((err)=>errorPage(err, res));
 });
 
 var server = app.listen(8081, function () {
