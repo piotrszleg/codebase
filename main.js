@@ -74,10 +74,10 @@ app.get(/code\/([0-9]+)\/edit/, function (req, res) {
 		}
 	});
 });
- app.get(/code\/create/, function (req, res) {
+app.get(/code\/create/, function (req, res) {
 	parser.run("edit.html", {user:req.session.user}, (result)=>res.send(result));
  });
- app.post(/code\/create/, function (req, res) {
+app.post(/code\/create/, function (req, res) {
 	posts.create({title:req.body.title, text:req.body.text, owner:req.session.user}, (result)=>{
 		if(result) {
 			res.redirect("/code/all/");

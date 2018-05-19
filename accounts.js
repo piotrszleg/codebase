@@ -69,6 +69,19 @@ exports.login=(username, password)=>{
 	});
 }
 
+exports.remove=(username)=>{
+	return new Promise(async (resolve, reject)=>{
+		try {
+			await promiseWhen(()=>db);
+			await db.collection("users").remove({"username" : username});
+			resolve();
+		} catch(err){
+			reject(err);
+		}
+	});
+}
+
+
 exports.list=()=>{
 	return new Promise((resolve, reject)=>{
 		promiseWhen(()=>db)
