@@ -1,43 +1,58 @@
-var mysql = require('mysql');
 var bcrypt = require('bcryptjs');
-
 const saltRounds = 10;
 
-//mysql
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "accounts"
-});
-con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected to the mysql database.");
-});
+var MongoClient = require('mongodb').MongoClient;
+const url = "mongodb://localhost:27017/codebase";
+// get the database object
+var db=null;
+MongoClient.connect(url)
+	.then(function callback(_db){db=_db.db("codebase")})// dafuq mongo?
+	.catch((err)=>{throw err});
 
-exports.register=(username, password, callback)=>{
-	console.log("Register as %s with password %s", username, password);
+function promiseWhen(condition, timeout){
+	if(!timeout){
+		timeout = 2000;
+	}
+	return new Promise((resolve, reject)=>{
+		setTimeout(()=>reject(new Error("Promise when expired.")), timeout);// reject promise if given timeout is exceeded
+		function loop(){
+			if(condition()){//check condition
+				resolve();
+			} else {
+				setTimeout(loop,0);
+			}
+		}
+		setTimeout(loop,0);
+	});
+}
 
-	var sql = "SELECT * FROM users WHERE name=?";
-	con.query(sql, username, function (err, result) {// find user of given username
-		if(result[0]!==undefined){
-			console.log("User already exists");
-			callback(false);// user exists, so registration must fail
-		} else {
-			bcrypt.hash(password, saltRounds, function(err, hash) {// make hash out of password provided
-				if (err) {
-					 console.error(err);
-					 callback(false);
-				}
-			    var sql = "INSERT INTO users (name, password) VALUES ?";
-				con.query(sql, [[[username, hash]]], function (err, result) {// insert username and password to the database
-					if (err) {
-						 console.error(err);
-						 callback(false);
-					}
-					callback(result);
-				});
-			});
+exports.get=(username)=>{
+	return new Promise(async (resolve, reject)=>{
+		try {
+			await promiseWhen(()=>db);
+			resolve((await db.collection("users").find(
+				{"username" : username}
+			)).next());
+		} catch(err){
+			reject(err);
+		}
+	});
+}
+
+exports.register=(username, password)=>{
+	return new Promise(async (resolve, reject)=>{
+		try {
+			await promiseWhen(()=>db);
+			if((await exports.get(username))==null){
+				var hashed = await bcrypt.hash(password, saltRounds);
+				resolve(await db.collection("users").insertOne(
+					{"username" : username, "password" : hashed}
+				));
+			} else{
+				reject(new Error("User already exists."));
+			}
+		} catch(err){
+			reject(err);
 		}
 	});
 }
@@ -84,12 +99,14 @@ exports.userdata=(username, callback)=>{
 	});
 }
 
-exports.userslist=(callback)=>{
-	var sql = "SELECT name, level FROM users";
-	con.query(sql, function (err, result) {
-		if (err) {
-			 console.error(err);
-		}
-		callback(result);
+exports.userslist=()=>{
+	return new Promise((resolve, reject)=>{
+		promiseWhen(()=>db)
+		.then(()=>{
+			db.collection("users").find({}).toArray()
+				.then(resolve)
+				.catch(reject);
+		})
+		.catch(reject);
 	});
 }
