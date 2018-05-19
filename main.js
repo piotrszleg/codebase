@@ -35,6 +35,10 @@ if (app.get('env') === 'production') {
 }
 app.use(session(sess));
 
+function errorHandler(error, res){
+	parser.run("error.html", {"message":error}, (result)=>res.send(result));
+}
+
 function canEditPost(post, request){
 	return request.session.user==post.owner && post.owner;
 }
@@ -146,21 +150,9 @@ app.get('/logout', function (req, res) {
 	res.redirect('/');
 });
 app.get('/userslist', function (req, res) {
-	accounts.userslist((result)=>{
-		parser.run("users.html", {rows:result, user:req.session.user}, (result)=>res.send(result));
-	});
-});
-app.get('/userslist.json', function (req, res) {
-	res.setHeader('Content-Type', 'application/json');
-	accounts.userslist((result)=>{
-		res.send(result);
-	});
-});
-app.get('/userdata.json', function (req, res) {
-	res.setHeader('Content-Type', 'application/json');
-	accounts.userdata(req.session.user, (result)=>{
-		res.send(result);
-	});
+	accounts.list()
+		.then((result)=>parser.run("users.html", {rows:result, user:req.session.user}, (result)=>res.send(result)))
+		.catch((err)=>errorHandler(err, res));
 });
 
 var server = app.listen(8081, function () {

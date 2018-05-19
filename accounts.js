@@ -6,9 +6,10 @@ const url = "mongodb://localhost:27017/codebase";
 // get the database object
 var db=null;
 MongoClient.connect(url)
-	.then(function callback(_db){db=_db.db("codebase")})// dafuq mongo?
+	.then(function callback(client){db=client.db("codebase")})
 	.catch((err)=>{throw err});
 
+// returns a Promise that resolves when condition evaluates to non falsy value
 function promiseWhen(condition, timeout){
 	if(!timeout){
 		timeout = 2000;
@@ -57,49 +58,22 @@ exports.register=(username, password)=>{
 	});
 }
 
-exports.login=(username, password, callback)=>{
-	console.log("Login as %s with password %s", username, password);
-
-	var sql = "SELECT password FROM users WHERE name=?";
-	con.query(sql, username, function (err, result) {// find user of given username
-		if (err) {
-			 console.error(err);
-			 callback(false);
-		}
-		if(result[0]!==undefined){// if the user exists check the password
-			bcrypt.compare(password, String(result[0].password), function(err, result) {
-				if (err) {
-					 console.error(err);
-					 callback(false);
-				}
-		      	callback(result);
-		    });	
-		} else {
-			callback(false);
+exports.login=(username, password)=>{
+	return new Promise(async (resolve, reject)=>{
+		try {
+			await promiseWhen(()=>db);
+			if((await exports.get(username)).password==password){
+				resolve();
+			} else{
+				reject(new Error("User data doesn't match."));
+			}
+		} catch(err){
+			reject(err);
 		}
 	});
 }
 
-exports.userdata=(username, callback)=>{
-	console.log("Getting data of user: %s", username);
-
-	if(username===undefined){
-		callback(undefined);
-		return;
-	}
-
-	var sql = "SELECT name, level FROM users WHERE name=?";
-	con.query(sql, username, function (err, result) {// find user of given username
-		if (err) {
-			 console.error(err);
-			 callback(undefined);
-		} else {
-			callback(result[0]);
-		}
-	});
-}
-
-exports.userslist=()=>{
+exports.list=()=>{
 	return new Promise((resolve, reject)=>{
 		promiseWhen(()=>db)
 		.then(()=>{
