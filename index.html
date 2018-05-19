@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Accounts</title>
+</head>
+
+<body>
+
+<div id="logged-container">
+	<h3>You're logged in as: <span id="user-prompt"></span></h3>
+	<p>Your level is <span id="level-prompt"></span></p>
+	<a href="/logout">log out</a>
+</div>
+
+<div id="authorization-container">
+	<form id="register-form" action="/register" method="post">
+		<h3>Register</h3>
+		username: <input type="text" name="user" id="user-input"/><br>
+		password: <input type="password" name="password" id="password-input"/><br>
+		<input type="submit" name="submit" value="register"/>
+	</form>
+	<br>
+	<form id="login-form" action="/login" method="post">
+		<h3>Login</h3>
+		username: <input type="text" name="user" id="user-input"/><br>
+		password: <input type="password" name="password" id="password-input"/><br>
+		<input type="submit" name="submit" value="login"/>
+	</form>
+</div>
+<a href="/code/create">create post</a><br>
+<a href="/code/all">posts list</a><br>
+<a href="/userslist">users list</a><br>
+
+<script type="text/javascript">
+
+var entityMap = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+  '/': '&#x2F;',
+  '`': '&#x60;',
+  '=': '&#x3D;'
+};
+function escapeHtml (string) {
+  return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+    return entityMap[s];
+ });
+ }
+
+var levels=["user", "moderator", "admin", "owner"];
+
+var request = new XMLHttpRequest();
+request.onreadystatechange = function(e){
+	if (this.readyState == 4 && this.status == 200) {
+		if(e.target.responseText!==""){
+		   var data=JSON.parse(e.target.responseText);
+		   if(data.name!=undefined){
+		   		document.getElementById("authorization-container").style.display="none";
+		   		document.getElementById("user-prompt").innerHTML=escapeHtml(data.name);
+		   		document.getElementById("level-prompt").innerHTML=escapeHtml(levels[data.level]);
+		   } else {
+		   		document.getElementById("logged-container").style.display="none";
+		   }
+		} else {
+			document.getElementById("logged-container").style.display="none";
+		}
+	}
+}
+request.open('GET', '/userdata.json', true);
+request.send();
+</script>
+
+</body>

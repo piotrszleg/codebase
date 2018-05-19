@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Last Artist Standing</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="style.css" rel="stylesheet">
+  <script>
+    /* source : https://codepen.io/vsync/pen/frudD
+       author : Yair Even Or
+
+       Applied globally on all textareas with the "autoExpand" class
+    */
+    $(document)
+    .one('focus.auto-expand', 'textarea.auto-expand', function(){
+        var savedValue = this.value;
+        this.value = '';
+        this.baseScrollHeight = this.scrollHeight;
+        this.value = savedValue;
+    })
+    .on('input.autoExpand', 'textarea.auto-expand', function(){
+        var minRows = this.getAttribute('data-min-rows')|0, rows;
+        this.rows = minRows;
+        rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
+        this.rows = minRows + rows;
+    });
+  </script>
+  <style>
+  /* Remove the navbar's default rounded borders and increase the bottom margin */ 
+    .navbar {
+      margin-bottom: 0px;
+      border-radius: 0;
+    }
+    
+    /* Remove the jumbotron's default bottom margin */ 
+     .jumbotron {
+      margin-bottom: 0;
+      height:150px;
+      background-image: url("headerimg.jpg");
+      background-position: 0% 25%;
+    }
+  
+    .timer {
+      font-size:1.4em;
+    }
+  
+    .code-input{
+        width: 100%;
+        resize: none;
+    }
+  
+    .auto-expand{  
+      display: block;
+      box-sizing: padding-box;
+      overflow: hidden;
+    }
+  
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  
+  </style>
+</head>
+<body>
+  
+  
+  </div>
+  
+  
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href='<?php echo"{$base_url}"?>'>Code Base</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><a href='<?php echo"{$base_url}"?>'>New</a></li>
+          <li><a href='<?php echo"{$base_url}"?>'>Posts</a></li>
+          <li><a href='<?php echo"{$base_url}"?>'>Users</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                User
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Your Profile</a></li>
+                  <li><a href="#">Settings</a></li>
+                  <li><a href="#">Log Out</a></li>
+                </ul>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<div class="container-fluid page-container">    
+  <div class="row content">
+    <div class="col-sm-12 text-left"> 
+        <form role="form" style="padding-top:1em;">
+            <div class="form-group">
+                <input type="text" class="form-control" name="title" id="title-input" placeholder="Title" value="{{title}}">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control auto-expand code-input" rows='20' data-min-rows='20' autofocus name="text" id="text-input" placeholder='Your code...'>{{text}}</textarea>
+            </div>
+            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save</button>
+            <a class="btn btn-danger" href="/code/{{id}}/remove" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+        </form>
+    </div>
+  </div>
+</div>
+
+<div class='text-center col-xs-12'>
+    <hr>
+    <a class="up-arrow" href="#top" data-toggle="tooltip" title="TO TOP">
+        <span class="glyphicon glyphicon-chevron-up"></span>
+    </a>
+    <p>by <a href="https://github.com/piotrszleg">Piotr Szlęg</a></p>
+    <br>
+    <br>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<head>
+  <title>Code Base</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="style.css" rel="stylesheet">
+  <script>
+    /* source : https://codepen.io/vsync/pen/frudD
+       author : Yair Even Or
+
+       Applied globally on all textareas with the "autoExpand" class
+    */
+    $(document)
+    .one('focus.auto-expand', 'textarea.auto-expand', function(){
+        var savedValue = this.value;
+        this.value = '';
+        this.baseScrollHeight = this.scrollHeight;
+        this.value = savedValue;
+    })
+    .on('input.autoExpand', 'textarea.auto-expand', function(){
+        var minRows = this.getAttribute('data-min-rows')|0, rows;
+        this.rows = minRows;
+        rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
+        this.rows = minRows + rows;
+    });
+  </script>
+  <style>
+  /* Remove the navbar's default rounded borders and increase the bottom margin */ 
+    .navbar {
+      margin-bottom: 0px;
+      border-radius: 0;
+    }
+    
+    /* Remove the jumbotron's default bottom margin */ 
+     .jumbotron {
+      margin-bottom: 0;
+      height:150px;
+      background-image: url("headerimg.jpg");
+      background-position: 0% 25%;
+    }
+  
+    .timer {
+      font-size:1.4em;
+    }
+  
+    .code-input{
+        width: 100%;
+        resize: none;
+    }
+  
+    .auto-expand{  
+      display: block;
+      box-sizing: padding-box;
+      overflow: hidden;
+    }
+  
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  
+  </style>
+</head>

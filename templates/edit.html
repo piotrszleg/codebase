@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{{header}}}
+<body>
+{{{head}}}
+<div class="container-fluid page-container">   
+   <div class="row content">
+     <div class="col-sm-12 text-left"> 
+         <form role="form" style="padding-top:1em;" action="" method="post">
+             <div class="form-group">
+                 <input type="text" class="form-control" name="title" id="title-input" placeholder="Title" value="{{title}}">
+             </div>
+             <div class="form-group">
+                 <textarea class="form-control auto-expand code-input" rows='20' data-min-rows='20' autofocus name="text" id="text-input" placeholder='Your code...'>{{text}}</textarea>
+             </div>
+             <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save</button>
+             {{#id}}<a class="btn btn-danger" href="/code/{{id}}/remove" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>{{/id}}
+         </form>
+     </div>
+   </div>
+</div>
+
+<script type="text/javascript">
+</script>
+{{{footer}}}
+</body>
