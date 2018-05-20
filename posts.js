@@ -43,8 +43,8 @@ exports.edit=(id, author, title, content)=>{
 		try {
 			await promiseWhen(()=>db);
 				resolve(await db.collection("posts").updateOne(
-          {"_id" : ObjectId(id)},
-					{$set : {"author" : author, "title" : title, "content" : content}}
+          		{"_id" : ObjectId(id)},
+				{$set : {"author" : author, "title" : title, "content" : content}}
 				));
 		} catch(err){
 			reject(err);

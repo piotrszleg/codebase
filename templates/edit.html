@@ -15,7 +15,7 @@
                  <textarea class="form-control auto-expand code-input" rows='20' data-min-rows='20' autofocus name="text" id="text-input" placeholder='Your code...'>{{content}}</textarea>
              </div>
              <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save</button>
-             {{#_id}}<a class="btn btn-danger" href="/code/{{id}}/remove" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>{{/_id}}
+             {{#_id}}<a class="btn btn-danger" href="/code/remove/{{id}}" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>{{/_id}}
          </form>
      </div>
    </div>

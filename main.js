@@ -40,7 +40,7 @@ function errorPage(error, res){
 }
 
 function canEditPost(post, request){
-	return request.session.user==post.owner && post.owner;
+	return post.author && request.session.user==post.author;
 }
 
 app.get("/", function (req, res) {
@@ -63,44 +63,48 @@ app.get(/code\/all/, function (req, res) {
  });
 
 app.get(/code\/remove\/([a-z0-9]+)/, function (req, res) {// should be changed to post in the future
-	posts.get(req.params[0], (result)=>{
-		if(canEditPost(result, req)){
-			posts.delete(req.params[0], ()=>res.redirect("/code/all"));
-		} else {
-			parser.run("error.html", {message:"You can't delete this post."}, (result)=>res.send(result));
-		}
-	});
+	posts.get(req.params[0])
+		.then((result)=>{
+			if(canEditPost(result, req)){
+				posts.remove(req.params[0])
+					.then(()=>res.redirect("/code/all"))
+					.catch((err)=>errorPage(err, res));
+			} else {
+				errorPage(new Error("You can't remove this post."), res);
+			}
+		})
+		.catch((err)=>errorPage(err, res));
  });
 
  app.get(/code\/edit\/([a-z0-9]+)/, function (req, res) {
 	posts.get(req.params[0])
 		.then((result)=>{
-			console.log(result);
-			parser.run("edit.html", Object.assign({user:req.session.user}, result), (result)=>res.send(result))})
+			if(canEditPost(result, req)){
+				parser.run("edit.html", Object.assign({user:req.session.user}, result), (result)=>res.send(result))
+			} else {
+				errorPage(new Error("You can't edit this post."), res);
+			}
+		})
 		.catch((err)=>errorPage(err, res));
  });
  app.post(/code\/edit\/([a-z0-9]+)/, function (req, res) {
-	console.log("post edit");
-	posts.get(req.params[0], (result)=>{
-		if(canEditPost(result, req)){
-			posts.edit(req.params[0], {title:req.body.title, text:req.body.text}, (result)=>{
-				if(result) {
-					res.redirect("/code/"+req.params[0]);
-				} else {
-					res.send("fail");
-				}
-			});
-		} else {
-			parser.run("error.html", {message:"You can't edit this post."}, (result)=>res.send(result));
-		}
-	});
+	posts.get(req.params[0])
+		.then((result)=>{
+			if(canEditPost(result, req)){
+				posts.edit(req.params[0], req.session.user, req.body.title, req.body.text)
+					.then(()=>res.redirect("/code/"+req.params[0]))
+					.catch((err)=>errorPage(err, res));
+			} else {
+				errorPage(new Error("You can't edit this post."), res);
+			}
+		})
+		.catch((err)=>errorPage(err, res));
 });
 
 app.get(/code\/([a-z0-9]+)/, function (req, res) {
 	posts.get(req.params[0])
-		.then((result)=>{
-			console.log(result);
-			parser.run("view.html", Object.assign({user:req.session.user}, result), (result)=>res.send(result))})
+		.then((result)=>
+			parser.run("view.html", Object.assign({user:req.session.user}, result), (result)=>res.send(result)))
 		.catch((err)=>errorPage(err, res));
  });
 
