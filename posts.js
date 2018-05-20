@@ -1,4 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
+var ObjectId = require('mongodb').ObjectId; 
 const url = "mongodb://localhost:27017/codebase";
 // get the database object
 var db=null;
@@ -42,7 +43,7 @@ exports.edit=(id, author, title, content)=>{
 		try {
 			await promiseWhen(()=>db);
 				resolve(await db.collection("posts").updateOne(
-          {"_id":id},
+          {"_id" : ObjectId(id)},
 					{$set : {"author" : author, "title" : title, "content" : content}}
 				));
 		} catch(err){
@@ -55,7 +56,7 @@ exports.remove=(id)=>{
 	return new Promise(async (resolve, reject)=>{
 		try {
 			await promiseWhen(()=>db);
-			await db.collection("posts").remove({"_id" : id});
+			await db.collection("posts").remove({"_id" : ObjectId(id)});
 			resolve();
 		} catch(err){
 			reject(err);
@@ -66,9 +67,9 @@ exports.remove=(id)=>{
 exports.get=(id)=>{
 	return new Promise(async (resolve, reject)=>{
 		try {
-			await promiseWhen(()=>db);
+      await promiseWhen(()=>db);
 			resolve((await db.collection("posts").findOne(
-				{"_id" : id}
+				{"_id" : ObjectId(id)}
 			)));
 		} catch(err){
 			reject(err);

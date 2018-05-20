@@ -12,13 +12,12 @@
                 {{#rows}}
                 <div class="col-sm-4">
                     <div class="panel panel-default">
-                        <div class="panel-heading"><a href="/code/{{id}}">{{title}}{{^title}}#{{id}}{{/title}}</a> {{#owner}}by {{/owner}}{{owner}}</div>
+                        <div class="panel-heading"><a href="/code/{{_id}}">{{title}}{{^title}}#{{_id}}{{/title}}</a> {{#author}}by {{/author}}{{author}}</div>
                         <div class="panel-body" >
-                            <pre style="overflow:hidden; max-height:10.5em; border: 0; background-color: transparent;">{{text}}</pre>
+                            <pre style="overflow:hidden; max-height:10.5em; border: 0; background-color: transparent;">{{content}}</pre>
                             <hr>
-                            <a class="btn btn-info" href="/code/{{id}}" role="button">View</a>
-                            <a class="btn btn-info" href="/code/{{id}}/edit" role="button">Edit</a>
-                            <a class="btn btn-danger" href="/code/{{id}}/remove">Remove</a>
+                            <a class="btn btn-info" href="/code/edit/{{_id}}" role="button">Edit</a>
+                            <a class="btn btn-danger" href="/code/remove/{{_id}}">Remove</a>
                         </div>
                     </div>
                     </div>

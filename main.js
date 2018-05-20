@@ -47,18 +47,39 @@ app.get("/", function (req, res) {
 	res.redirect('/code/create/');
 });
 
-app.get(/code\/([0-9]+)\/edit/, function (req, res) {
+ app.get(/code\/create/, function (req, res) {
+	parser.run("edit.html", {user:req.session.user}, (result)=>res.send(result));
+ });
+app.post(/code\/create/, function (req, res) {
+	posts.create(req.session.user, req.body.title, req.body.text)
+	.then((result)=>res.redirect("/code/"+result))
+	.catch((err)=>errorPage(err, res));
+});
+
+app.get(/code\/all/, function (req, res) {
+	posts.all()
+		.then((result)=>parser.run("all.html", {rows:result, user:req.session.user}, (result)=>res.send(result)))
+		.catch((err)=>errorPage(err, res));
+ });
+
+app.get(/code\/remove\/([a-z0-9]+)/, function (req, res) {// should be changed to post in the future
 	posts.get(req.params[0], (result)=>{
-		if(result==null){
-			res.send("There is no post with this id.");
-		} else if(canEditPost(result, req)){
-			parser.run("edit.html", Object.assign(result, {user:req.session.user}), (result)=>res.send(result));
-		}else{
-			parser.run("error.html", {message:"You can't edit this post."}, (result)=>res.send(result));
+		if(canEditPost(result, req)){
+			posts.delete(req.params[0], ()=>res.redirect("/code/all"));
+		} else {
+			parser.run("error.html", {message:"You can't delete this post."}, (result)=>res.send(result));
 		}
 	});
  });
- app.post(/code\/([0-9]+)\/edit/, function (req, res) {
+
+ app.get(/code\/edit\/([a-z0-9]+)/, function (req, res) {
+	posts.get(req.params[0])
+		.then((result)=>{
+			console.log(result);
+			parser.run("edit.html", Object.assign({user:req.session.user}, result), (result)=>res.send(result))})
+		.catch((err)=>errorPage(err, res));
+ });
+ app.post(/code\/edit\/([a-z0-9]+)/, function (req, res) {
 	console.log("post edit");
 	posts.get(req.params[0], (result)=>{
 		if(canEditPost(result, req)){
@@ -74,53 +95,13 @@ app.get(/code\/([0-9]+)\/edit/, function (req, res) {
 		}
 	});
 });
-app.get(/code\/create/, function (req, res) {
-	parser.run("edit.html", {user:req.session.user}, (result)=>res.send(result));
- });
-app.post(/code\/create/, function (req, res) {
-	posts.create({title:req.body.title, text:req.body.text, owner:req.session.user}, (result)=>{
-		if(result) {
-			res.redirect("/code/all/");
-		} else {
-			parser.run("error.html", {message:"Creating post failed."}, (result)=>res.send(result));
-		}
-	});
-});
 
- app.get(/code\/([0-9]+)\/remove/, function (req, res) {// should be changed to post in the future
-	posts.get(req.params[0], (result)=>{
-		if(canEditPost(result, req)){
-			posts.delete(req.params[0], ()=>res.redirect("/code/all"));
-		} else {
-			parser.run("error.html", {message:"You can't delete this post."}, (result)=>res.send(result));
-		}
-	});
- });
- app.get(/code\/([0-9]+)\/report/, function (req, res) {
-	console.log("Requested report on: %s", req.params[0]);
-	res.redirect("/");
- });
- app.get(/code\/[0-9]+\/raw/, function (req, res) {
-	console.log("Requested raw of: %s", req.params[0]);
-	res.redirect("/");
- });
-app.get(/code\/([0-9]+)/, function (req, res) {
-	posts.get(req.params[0], (result)=>{
-		if(result==null){
-			parser.run("error.html", {message:"There is no post with this id."}, (result)=>res.send(result));
-		} else{
-			parser.run("view.html", result, (result)=>res.send(result));
-		}
-	});
- });
- app.get(/code\/all/, function (req, res) {
-	posts.getAll((result)=>{
-		if(result==null){
-			parser.run("error.html", {message:"Error."}, (result)=>res.send(result));
-		} else{
-			parser.run("all.html", {rows:result, user:req.session.user}, (result)=>res.send(result));
-		}
-	});
+app.get(/code\/([a-z0-9]+)/, function (req, res) {
+	posts.get(req.params[0])
+		.then((result)=>{
+			console.log(result);
+			parser.run("view.html", Object.assign({user:req.session.user}, result), (result)=>res.send(result))})
+		.catch((err)=>errorPage(err, res));
  });
 
 // User registry routes
@@ -141,7 +122,6 @@ app.post('/login', function (req, res) {
 		.catch((err)=>errorPage(err, res));
 });
 app.get('/logout', function (req, res) {
-	console.log("Log out");
 	req.session.user=undefined;
 	res.redirect('/');
 });

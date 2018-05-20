@@ -62,7 +62,12 @@ exports.login=(username, password)=>{
 	return new Promise(async (resolve, reject)=>{
 		try {
 			await promiseWhen(()=>db);
-			resolve(await bcrypt.compare((await exports.get(username)).password, password));
+			var correct = await bcrypt.compare(password, (await exports.get(username)).password)
+			if(correct){
+				resolve();
+			} else {
+				reject(new Error("Incorrect username or password."));
+			}
 		} catch(err){
 			reject(err);
 		}
