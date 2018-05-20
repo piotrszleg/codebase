@@ -5,10 +5,22 @@
 
 <body>
 {{{header}}}
-<br>
-<ul>
-{{#rows}}
-<li {{#level}}style="color:red"{{/level}}>{{username}}</li>
-{{/rows}}
-</ul>
+<div class="container-fluid page-container">   
+        <div class="row content">
+          <div class="col-sm-12 text-left"> 
+             <br>
+                {{#rows}}
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class='panel-body text-center'>
+                            <a href="/users/{{username}}">{{username}}</a>
+                            <p>10 posts</p>
+                        </div>
+                    </div>
+                    </div>
+                {{/rows}}
+            </div>
+    </div>
+</div>
 {{{footer}}}
+</body>
