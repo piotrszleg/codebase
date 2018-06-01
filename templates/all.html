@@ -4,15 +4,14 @@
 {{{head}}}
 
 <body>
-{{{header}}}
-<div class="container-fluid page-container">   
+    {{{header}}}
+    <div class="container-fluid page-container">
         <div class="row content">
-          <div class="col-sm-12 text-left"> 
                 {{#rows}}
-                    <div class="row content">
-                      <div class="col-sm-12 text-left"> 
+                    <div class="col-sm-12 text-left">
                         <h1 id="title">
-                            <a href="/code/{{_id}}">{{title}}</a> <span style="color:lightgray;font-size: 0.5em">{{#author}}by {{.}}{{/author}}</span>
+                            <a href="/code/{{_id}}">{{title}}</a>
+                            <span style="color:lightgray;font-size: 0.5em">{{#author}}by {{.}}{{/author}}</span>
                             <a class="btn btn-warning" href="/code/edit/{{_id}}" role="button">Edit</a>
                             <a class="btn btn-danger" href="/code/remove/{{_id}}" role="button">Remove</a>
                         </h1>
@@ -20,12 +19,10 @@
                             <code>{{content}}</code>
                             <div class="minimized-code-fadout"></div>
                         </pre>
-                        </div>
+                        
                     </div>
-                    <hr>
-                {{/rows}}
-            </div>
+                 {{/rows}}
+        </div>
     </div>
-</div>
-{{{footer}}}
+    {{{footer}}}
 </body>
