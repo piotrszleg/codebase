@@ -14,7 +14,13 @@
              <div class="form-group">
                  <textarea class="form-control auto-expand code-input" rows='20' data-min-rows='20' autofocus name="text" id="text-input" placeholder='Your code...'>{{content}}</textarea>
              </div>
-             <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save</button>
+             <div class="form-group">
+                 <input type="text" class="form-control" name="tags" id="tags-input" placeholder="Tags..." value="{{tags}}">
+            </div>
+            <div class="form-group">
+                <p id="tags-container"><span id="tag-prototype" class="label label-primary hidden">#new</span></p>
+            </div>
+            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save</button>
              {{#_id}}<a class="btn btn-danger" href="/code/remove/{{id}}" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>{{/_id}}
          </form>
      </div>
@@ -22,6 +28,23 @@
 </div>
 
 <script type="text/javascript">
+$(function(){
+    function updateTags(){
+        var tags=$("#tags-input").val().split(/(#[a-zA-Z0-9]+) ?/);
+        $("#tags-container>*:not(#tag-prototype)").remove();
+        
+        for(var t of tags){
+            $("#tag-prototype").clone()
+                .appendTo("#tags-container")
+                .removeClass("hidden")
+                .attr("id", null)
+                .html(t)
+                .after(" ");
+        }
+    }
+    $("#tags-input").keyup(updateTags);
+    updateTags();
+});
 </script>
 {{{footer}}}
 </body>

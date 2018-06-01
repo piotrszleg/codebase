@@ -9,30 +9,20 @@
         <div class="row content">
           <div class="col-sm-12 text-left"> 
              <br>
-            <table class="table table-hover">
-                <thead>
-                     <tr>
-                       <th scope="col">#</th>
-                       <th scope="col">Title</th>
-                      <th scope="col">User</th>
-                      <th scope="col"></th>
-                      <th scope="col"></th>
-                     </tr>
-                </thead>
-                <tbody>
-                    {{#rows}}
-                    <tr>
-                        <th scope="row">{{id}}</th>
-                        <td><a href="/code/{{id}}">{{title}}{{^title}}#{{id}}{{/title}}</a></td>
-                        <td>{{owner}}</td>
-                        <td>{{text}}</td>
-                        <td><a href="/code/{{id}}/edit">edit</a></td>
-                        <td><a style="color:red" href="/code/{{id}}/remove">remove</a></td>
-                    </tr>
-                    {{/rows}}
-                </tbody>
-            </table>
-        </div>
+                {{#rows}}
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="/code/{{_id}}">{{title}}{{^title}}#{{_id}}{{/title}}</a> {{#author}}by {{/author}}{{author}}</div>
+                        <div class="panel-body" >
+                            <pre style="overflow:hidden; max-height:10.5em; border: 0; background-color: transparent;">{{content}}</pre>
+                            <hr>
+                            <a class="btn btn-info" href="/code/edit/{{_id}}" role="button">Edit</a>
+                            <a class="btn btn-danger" href="/code/remove/{{_id}}">Remove</a>
+                        </div>
+                    </div>
+                    </div>
+                {{/rows}}
+            </div>
     </div>
 </div>
 {{{footer}}}

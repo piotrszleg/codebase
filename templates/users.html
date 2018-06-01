@@ -6,20 +6,18 @@
 <body>
 {{{header}}}
 <div class="container-fluid page-container">   
+    <br>
         <div class="row content">
-          <div class="col-sm-12 text-left"> 
-             <br>
                 {{#rows}}
-                <div class="col-sm-4">
-                    <div class="panel panel-default">
-                        <div class='panel-body text-center'>
-                            <a href="/users/{{username}}">{{username}}</a>
+                <div class="col-sm-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <a href="/users/{{_id}}">{{username}}</a>
                             <p>10 posts</p>
                         </div>
                     </div>
-                    </div>
+                </div>
                 {{/rows}}
-            </div>
     </div>
 </div>
 {{{footer}}}

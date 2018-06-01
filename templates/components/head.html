@@ -6,9 +6,9 @@
   <script>hljs.initHighlightingOnLoad();</script>
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
   <script>
     /* source : https://codepen.io/vsync/pen/frudD
        author : Yair Even Or
@@ -49,6 +49,19 @@
       display: block;
       box-sizing: padding-box;
       overflow: hidden;
+    }
+
+    .minimized-code{
+      max-height:14.5em;
+      overflow: hidden;
+    }
+
+    .minimized-code-fadout{
+      background: linear-gradient(rgba(0, 0, 0, 0), #f0f0f0);
+      position: absolute;
+      height:10em;
+      width:100%;
+      bottom: 1em;
     }
   
     @media screen and (max-width: 767px) {
