@@ -10,10 +10,12 @@
       <div class="col-sm-12 text-left"> 
         <h1 id="title">
             {{title}} <span style="color:lightgray;font-size: 0.5em">{{#author}}by {{.}}{{/author}}</span> 
-            <a class="btn btn-secondary" href="/code/edit/{{_id}}" role="button">Edit</a>
-            <a class="btn btn-secondary" href="/code/remove/{{_id}}" role="button">Remove</a>
+            <div class="float-right">
+                <a class="btn btn-secondary" href="/code/edit/{{_id}}" role="button">Edit</a>
+                <a class="btn btn-secondary" href="/code/remove/{{_id}}" role="button">Remove</a>
+            </div>
         </h1>
-        <pre style="background-color: #f0f0f0;"><code>{{content}}</code></pre>
+        <pre style="background-color: #f0f0f0; width:100%;"><code>{{content}}</code></pre>
         </div>
     </div>
 </div>

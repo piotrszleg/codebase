@@ -33,8 +33,8 @@
     background: linear-gradient(rgba(0, 0, 0, 0), #f0f0f0);
     position: absolute;
     height: 10em;
-    width: 80%;
-    bottom: 1em;
+    width:96%;
+    bottom: 1.2em;
 }
 
 @media screen and (max-width: 767px) {
