@@ -4,20 +4,47 @@
 {{{head}}}
 
 <body>
-{{{header}}}
-<div class="container-fluid page-container">   
-    <div class="row content">
-      <div class="col-sm-12 text-left"> 
-        <h1 id="title">
-            {{title}} <span style="color:lightgray;font-size: 0.5em">{{#author}}by {{.}}{{/author}}</span> 
-            <div class="float-right">
-                <a class="btn btn-secondary" href="/code/edit/{{_id}}" role="button">Edit</a>
-                <a class="btn btn-secondary" href="/code/remove/{{_id}}" role="button">Remove</a>
+    {{{header}}}
+    <div class="container-fluid page-container">
+        <div class="row content">
+            <div class="col-sm-12 text-left">
+                <h1 id="title">
+                    {{title}}
+                    <span style="color:lightgray;font-size: 0.5em">{{#author}}by {{.}}{{/author}}</span>
+                    <div class="float-right">
+                        <a class="btn btn-secondary" href="/code/edit/{{_id}}" role="button">Edit</a>
+                        <a class="btn btn-secondary" href="/code/remove/{{_id}}" role="button">Remove</a>
+                    </div>
+                </h1>
+                <pre style="background-color: #f0f0f0; width:100%;"><code>{{content}}</code></pre>
+                <p>language: <a href="/code/search/{{language}}">{{language}}</a></p>
+                <p id="tags-text" class="d-none">{{tags}}</p>
+                <p id="tags-container">
+                    <span id="tag-prototype" class="badge badge-pill badge-primary d-none">#new</span>
+                </p>
             </div>
-        </h1>
-        <pre style="background-color: #f0f0f0; width:100%;"><code>{{content}}</code></pre>
         </div>
     </div>
-</div>
-{{{footer}}}
+    {{{footer}}}
+    <script type="text/javascript">
+        $(function(){
+            function updateTags() {
+                var tags = $("#tags-text").html().split(/(#[a-zA-Z0-9]+) ?/);
+                $("#tags-container>*:not(#tag-prototype)").remove();
+
+                for (var t of tags) {
+                    console.log(t);
+                    if (t.match(/(#[a-zA-Z0-9]+)/)) {
+                        $("#tag-prototype").clone()
+                            .appendTo("#tags-container")
+                            .removeClass("d-none")
+                            .attr("id", null)
+                            .html(t)
+                            .after(" ");
+                    }
+                }
+            }
+            updateTags();
+        });
+    </script>
 </body>

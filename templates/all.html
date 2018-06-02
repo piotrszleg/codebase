@@ -20,10 +20,14 @@
                             </div>
                         </h1>
                         <pre class="minimized-code" style="background-color: #f0f0f0; width:100%;">
-                            <code>{{content}}</code>
-                            <div class="minimized-code-fadout"></div>
+                            <code>{{content}}<div class="minimized-code-fadout"></div></code>
+                            
                         </pre>
-                        
+                        <p>language: <a href="/code/search/{{language}}">{{language}}</a></p>
+                        <p id="tags-text" class="d-none">{{tags}}</p>
+                        <p id="tags-container">
+                            <span id="tag-prototype" class="badge badge-pill badge-primary d-noone">#new</span>
+                        </p>
                     </div>
                  {{/rows}}
         </div>

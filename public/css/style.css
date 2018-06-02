@@ -34,7 +34,8 @@
     position: absolute;
     height: 10em;
     width:96%;
-    bottom: 1.2em;
+    bottom: 7em;
+    right:1em;
 }
 
 @media screen and (max-width: 767px) {
