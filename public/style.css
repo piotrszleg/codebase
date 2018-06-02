@@ -1,0 +1,48 @@
+/* Remove the navbar's default rounded borders and increase the bottom margin */
+.navbar {
+    margin-bottom: 0px;
+    border-radius: 0;
+}
+
+.timer {
+    font-size: 1.4em;
+}
+
+.code-input {
+    width: 100%;
+    resize: none;
+}
+
+.auto-expand {
+    display: block;
+    box-sizing: padding-box;
+    overflow: hidden;
+}
+
+.minimized-code {
+    max-height: 14.5em;
+    overflow: hidden;
+    overflow-x: hidden;
+}
+
+.minimized-code>code {
+    overflow: hidden;
+}
+
+.minimized-code-fadout {
+    background: linear-gradient(rgba(0, 0, 0, 0), #f0f0f0);
+    position: absolute;
+    height: 10em;
+    width: 80%;
+    bottom: 1em;
+}
+
+@media screen and (max-width: 767px) {
+    .sidenav {
+        height: auto;
+        padding: 15px;
+    }
+    .row.content {
+        height: auto;
+    }
+}
