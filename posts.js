@@ -25,12 +25,12 @@ function promiseWhen(condition, timeout){
 	});
 }
 
-exports.create=(author, title, content)=>{
+exports.create=(author, title, content, language, tags)=>{
 	return new Promise(async (resolve, reject)=>{
 		try {
       await promiseWhen(()=>db);
         var id = (await db.collection("posts").insertOne(
-                {"author" : author, "title" : title, "content" : content})).insertedId;
+                {"author" : author, "title" : title, "content" : content, "language" : language, "tags": tags})).insertedId;
 				resolve(id);
 		} catch(err){
 			reject(err);
@@ -38,13 +38,13 @@ exports.create=(author, title, content)=>{
 	});
 }
 
-exports.edit=(id, author, title, content)=>{
+exports.edit=(id, author, title, content, language, tags)=>{
   return new Promise(async (resolve, reject)=>{
 		try {
 			await promiseWhen(()=>db);
 				resolve(await db.collection("posts").updateOne(
           		{"_id" : ObjectId(id)},
-				{$set : {"author" : author, "title" : title, "content" : content}}
+				{$set : {"author" : author, "title" : title, "content" : content, "language" : language, "tags": tags}}
 				));
 		} catch(err){
 			reject(err);

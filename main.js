@@ -51,7 +51,7 @@ app.get("/", function (req, res) {
 	parser.run("edit.html", {user:req.session.user}, (result)=>res.send(result));
  });
 app.post(/code\/create/, function (req, res) {
-	posts.create(req.session.user, req.body.title, req.body.text)
+	posts.create(req.session.user, req.body.title, req.body.text, req.body.language, req.body.tags)
 	.then((result)=>res.redirect("/code/"+result))
 	.catch((err)=>errorPage(err, res));
 });
@@ -91,7 +91,7 @@ app.get(/code\/remove\/([a-z0-9]+)/, function (req, res) {// should be changed t
 	posts.get(req.params[0])
 		.then((result)=>{
 			if(canEditPost(result, req)){
-				posts.edit(req.params[0], req.session.user, req.body.title, req.body.text)
+				posts.edit(req.params[0], req.session.user, req.body.title, req.body.text, req.body.language, req.body.tags)
 					.then(()=>res.redirect("/code/"+req.params[0]))
 					.catch((err)=>errorPage(err, res));
 			} else {
