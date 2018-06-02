@@ -1,38 +1,3 @@
-<!--<nav class="navbar navbar-inverse">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href='/'>Code Base</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li><a href='/code/create'>New</a></li>
-        <li><a href='/code/all/'>Posts</a></li>
-        <li><a href='/userslist'>Users</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-          {{^user}}
-          <li><a href='javascript: void($("#registerModal").modal());'>Register</a></li>
-          <li><a href='javascript: void($("#loginModal").modal());'>Login</a></li>
-          {{/user}}
-          {{#user}}
-          <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-              {{.}}
-              <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Your Profile</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="/logout">Log Out</a></li>
-              </ul>
-          </li>
-          {{/user}}
-      </ul>
-    </div>
-</nav>-->
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <a class="navbar-brand" href="/">Code Base</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
