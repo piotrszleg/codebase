@@ -4,6 +4,14 @@
     border-radius: 0;
 }
 
+.card{
+    margin-bottom:1em;
+    padding:15px;
+}
+.card:nth-of-type(1){
+    margin-top:1em;  
+}
+
 .timer {
     font-size: 1.4em;
 }
