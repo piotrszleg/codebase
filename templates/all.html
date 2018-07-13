@@ -10,8 +10,8 @@
         <br>
         <div class="row content">
                 {{#rows}}
-                    <div class="col-sm-12 text-left">
-                        <h1 id="title">
+                    <div class="panel panel-default card col-sm-12 text-left" style="margin-bottom:1em; padding:15px;">
+                        <h2 id="title">
                             <a href="/code/{{_id}}">{{title}}</a>
                             <span style="color:lightgray;font-size: 0.5em">{{#author}}by {{.}}{{/author}}</span>
                             <div class="float-right">
@@ -20,13 +20,12 @@
                             </div>
                         </h1>
                         <pre class="minimized-code" style="background-color: #f0f0f0; width:100%;">
-                            <code>{{content}}<div class="minimized-code-fadout"></div></code>
-                            
+                            <code>{{content}}</code><div class="minimized-code-fadout"></div>
                         </pre>
-                        <p>language: <a href="/code/search/{{language}}">{{language}}</a></p>
+                        {{#language}}<p>language: <a href="/code/search/{{language}}">{{.}}</a></p>{{/language}}
                         <p id="tags-text" class="d-none">{{tags}}</p>
                         <p id="tags-container">
-                            <span id="tag-prototype" class="badge badge-pill badge-primary d-noone">#new</span>
+                            <span id="tag-prototype" class="badge badge-pill badge-primary d-none">#new</span>
                         </p>
                     </div>
                  {{/rows}}
