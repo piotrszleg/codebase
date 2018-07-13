@@ -15,6 +15,7 @@ var parser = require('./parser');
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require("body-parser");
+var RateLimit = require('express-rate-limit');
 var app = express();
 
 app.use(bodyParser.json()); // Configures bodyParser to accept JSON
@@ -35,9 +36,33 @@ if (app.get('env') === 'production') {
 }
 app.use(session(sess));
 
+function limitErrorPage(req, res) {
+	errorPage(new Error("Please try again after an hour."), res);
+}
+
 function errorPage(error, res){
 	parser.run("error.html", {"message":error.message}, (result)=>res.send(result));
 }
+
+var standardLimiter = new RateLimit({
+	windowMs: 15*60*1000, // 15 minutes
+	max: 100, // limit each IP to 100 requests per windowMs
+	delayMs: 0 // disable delaying - full speed until the max limit is reached
+});
+
+//  apply to all requests
+app.use(standardLimiter);
+
+var stateChangeLimiter = new RateLimit({
+	windowMs: 60*60*1000, // 1 hour window
+	delayAfter: 1, // begin slowing down responses after the first request
+	delayMs: 3*1000, // slow down subsequent responses by 3 seconds per request
+	max: 5, // start blocking after 5 requests
+	handler : limitErrorPage
+});
+   
+ // only apply to requests that begin with /api/
+app.use([/code\/create/, /code\/edit\/([a-z0-9]+)/, '/register', '/login'], stateChangeLimiter);
 
 function canEditPost(post, request){
 	return post.author && request.session.user==post.author;
