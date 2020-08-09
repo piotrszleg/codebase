@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static('public'));
 
 var sess = {
-  secret: 'i still watch minecraft videos on youtube',
+  secret: 'This needs to be replaced in public release.',
   cookie: {},
   resave: true,
   saveUninitialized: false

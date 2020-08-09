@@ -15,7 +15,7 @@
     "express-rate-limit": "^2.11.0",
     "express-session": "^1.15.6",
     "mustache": "^2.3.0",
-    "mysql": "^2.15.0",
-    "nodemon": "^1.17.4"
+    "nodemon": "^1.17.4",
+    "mongodb": "^3.6.0"
   }
 }
